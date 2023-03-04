@@ -1,0 +1,5 @@
+welcome: "Welcome to the loan payment calculator!"
+amount: "Please enter the total loan amount in USD:"
+years: "Please enter the loan term in full years:"
+months: "Please enter the loan term in months:"
+apr: "Please enter the APR on the loan:"
