@@ -51,8 +51,7 @@ prompt('welcome')
 name = ''
 loop do
   name = gets.chomp
-
-  if name.empty?
+  if name.empty? # Add logic for checking for numbers?
     prompt('valid_name')
   else
     break

@@ -16,3 +16,21 @@ en:
   go_again: "Do you want to perform another calculation? (Y to calculate again)"
   goodbye: "Thank you for using the calculator. Goodbye!"
   valid_op: "Must choose 1, 2, 3, or 4"
+
+es:
+  welcome: "¡Bienvenido a Calculadora! Ingrese su nombre:"
+  valid_name: "Asegúrese de ingresar un nombre válido"
+  first_number: "¿Cuál es el primer número?"
+  valid_num: "Hmm.... ¿Eso no parece un número válido?"
+  second_number: "¿Cuál es el segundo número?"
+
+  operator_prompt:  |
+    ¿Qué operación le gustaría realizar?
+     1) agregar
+     2) restar
+     3) multiplicar
+     4) dividir
+    
+  go_again: "¿Quieres hacer otro cálculo? (Y volver a calcular)"
+  goodbye: "Gracias por usar la calculadora. ¡Adiós!"
+  valid_op: "Debe elegir 1, 2, 3 o 4"
