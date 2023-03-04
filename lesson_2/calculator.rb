@@ -30,19 +30,16 @@ def number?(num)
 end
 
 def operation_to_message(operation)
-  word = case operation
-           when '1'
-             'Adding'
-           when '2'
-             'Subtracting'
-           when '3'
-             'Multiplying'
-           when '4'
-             'Dividing'
-         end
-
-  x = "A random line of code"
-
+  word =  case operation
+          when '1'
+            'Adding'
+          when '2'
+            'Subtracting'
+          when '3'
+            'Multiplying'
+          when '4'
+            'Dividing'
+          end
   word
 end
 
@@ -52,6 +49,8 @@ name = ''
 loop do
   name = gets.chomp
   if name.empty? # Add logic for checking for numbers?
+    prompt('valid_name')
+  elsif number?(name)
     prompt('valid_name')
   else
     break
