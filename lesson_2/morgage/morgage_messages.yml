@@ -5,9 +5,9 @@ months: "Please enter the loan term in months:"
 apr: "Please enter the APR on the loan:"
 calculating: "Calculating your monthly payment..."
 integer_error: "Please only enter positive integers"
-usury: "The maximum legal rate of interest in Florida is 18%."
+usury_warning: "The maximum legal rate of interest in Florida is 18%."
 rate_error: "That is not a valid interest rate in the state of Florida."
-amount_error: "That is not a valid dollar amount."
+amount_error: "That is not a valid dollar amount for a loan."
 new_calc: |
   If you would like to quit the calculator please enter q. 
   Enter any other key to start a new calculation.
