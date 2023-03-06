@@ -14,16 +14,12 @@ def usd?(num)
   /\d/.match(num) && /^\$?\d*((\.\d\d)|\b)$/.match(num)
 end
 
-def dollar_sign(num)
+def dollar_to_float(num)
   num.sub(/[\$]/, '0').to_f
 end
 
 def integer?(num)
   num.to_i == num.to_i.abs && num == num.to_i.to_s
-end
-
-def monthly_payment(p, j, n)
-  (p * (j / (1 - (1 + j)**(-n)))).round(2)
 end
 
 def valid_term?(years, months)
@@ -44,13 +40,11 @@ loop do
   loop do
     prompt('amount')
     amount = gets.chomp
-    if usd?(amount) && dollar_sign(amount) != 0
-      amount = dollar_sign(amount)
-      break
-    else
-      prompt('amount_error')
-    end
+    break if usd?(amount) && dollar_to_float(amount) != 0
+    prompt('amount_error')
   end
+
+  amount = dollar_to_float(amount)
 
   years = ' '
   months = ' '
@@ -77,16 +71,16 @@ loop do
 
   prompt('usury_warning')
   apr = ' '
-  monthly_interest = ' '
+  monthly_rate = ' '
   loop do
     prompt('apr')
     apr = gets.chomp
     if rate_format?(apr)
-      monthly_interest = apr.to_f / 12
+      monthly_rate = apr.to_f / 12
       apr = apr.to_f * 100
       break
     elsif percent_format?(apr)
-      monthly_interest = apr.to_f / 1200
+      monthly_rate = apr.to_f / 1200
       apr = apr.to_f
       break
     else
@@ -94,13 +88,13 @@ loop do
     end
   end
 
-  monthly_payment = monthly_payment(amount, monthly_interest, term)
-  prompt('calculating')
+  monthly_payment = amount *
+                    (monthly_rate / (1 - (1 + monthly_rate)**(-term)))
 
   result_message = <<-MSG
     Your monthly payment is $#{format('%.2f', monthly_payment)} 
     for a loan amount of $#{format('%.2f', amount)} 
-    with a #{apr}% annual interest rate 
+    with a #{format('%.2f', apr)}% annual interest rate 
     for a term of #{years} years and #{months} months.
   MSG
 
