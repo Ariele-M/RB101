@@ -42,7 +42,7 @@ def display_results(player, computer)
 end
 
 def prompt_player
-  puts ("=> Choose one: #{MOVES.keys.join(', ')}")
+  puts("=> Choose one: #{MOVES.keys.join(', ')}")
   gets.chomp.downcase
 end
 
