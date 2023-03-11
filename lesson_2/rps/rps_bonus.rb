@@ -1,5 +1,7 @@
 require 'abbrev'
-require 'pp'
+require 'yaml'
+
+MESSAGES = YAML.load_file('rpsls_messages.yml')
 
 MOVES = {
   "rock" => {
@@ -21,22 +23,26 @@ MOVES = {
 
 ABBREVIATIONS = MOVES.keys.abbrev
 
+def messages(message)
+  MESSAGES[message]
+end
+
 def win?(first, second)
   MOVES[first][:defeats].include?(second)
 end
 
 def display_results(player, computer)
   if win?(player, computer)
-    prompt("You won!")
+    prompt("player_won")
   elsif win?(computer, player)
-    prompt("Computer won!")
+    prompt("computer_won")
   else
-    prompt("It's a tie!")
+    prompt("tie")
   end
 end
 
 def prompt_player
-  prompt("Choose one: #{MOVES.keys.join(', ')}")
+  puts ("=> Choose one: #{MOVES.keys.join(', ')}")
   gets.chomp.downcase
 end
 
@@ -48,8 +54,10 @@ def validate_choice
       break
     elsif ABBREVIATIONS.include?(choice)
       break
+    elsif choice == 's'
+      prompt("s_error")
     else
-      prompt("That's not a valid choice")
+      prompt("not_valid")
     end
   end
   convert_abbrev(choice)
@@ -58,12 +66,13 @@ end
 def convert_abbrev(choice)
   if MOVES.keys.include?(choice)
     choice
-  else ABBREVIATIONS.include?(choice)
-    choice = ABBREVIATIONS[choice]
+  elsif ABBREVIATIONS.include?(choice)
+    ABBREVIATIONS[choice]
   end
 end
 
-def prompt(message)
+def prompt(key)
+  message = messages(key)
   puts("=> #{message}")
 end
 
@@ -90,23 +99,37 @@ def game_result(first, second)
 end
 
 def prompt_play_again?
-  prompt("Do you want to play again?")
+  prompt("play_again")
   answer = gets.chomp
   answer.downcase.start_with?('y')
 end
 
-welcome_message = <<~MSG
-  Welcome to #{MOVES.keys.join(', ')}! 
-  This game is a variation on Rock, Paper, Scissors.
-  The rules are simple: Scissors cuts Paper covers Rock
-  crushes Lizard poisons Spock smashes Scissors
-  decapitates Lizard eats Paper disproves Spock
-  vaprorizes Rock crushes Scissors.
-  ---------
-  The first player to win 3 games wins the match.
-MSG
+def match_over?(score)
+  score.value?(3)
+end
 
-prompt(welcome_message)
+def display_choices(choice, computer_choice)
+  puts("=> You chose #{choice} computer chose #{computer_choice}")
+end
+
+def update_score(score, choice, computer_choice)
+  game_score = game_result(choice, computer_choice)
+  score.merge!(game_score) { |_, old_value, new_value| old_value + new_value }
+end
+
+def display_score(score)
+  puts "The score is:
+    player: #{score[:player_score]}
+    computer: #{score[:computer_score]}"
+end
+
+def display_match_winner(score)
+  winning_party = score[:player_score] == 3 ? "Player" : "Computer"
+  puts("=> #{winning_party} won the match!")
+end
+
+puts "=> Welcome to #{MOVES.keys.join(', ')}!"
+prompt("rules")
 
 loop do
   score = {
@@ -114,21 +137,20 @@ loop do
     computer_score: 0
   }
 
-  until score[:player_score] == 3 || score[:computer_score] == 3
+  until match_over?(score)
     choice = validate_choice
 
     computer_choice = MOVES.keys.sample
 
-    prompt("You chose #{choice} computer chose #{computer_choice}")
+    display_choices(choice, computer_choice)
 
     display_results(choice, computer_choice)
-    game_score = game_result(choice, computer_choice)
 
-    score = score.merge!(game_score) { |_, old_value, new_value| old_value + new_value }
-    puts "The score is: \n player: #{score[:player_score]} \n computer: #{score[:computer_score]}"
+    score = update_score(score, choice, computer_choice)
+
+    display_score(score)
   end
-
-  puts score[:player_score] == 3 ? "You've won the match!" : "The computer won the match!"
+  display_match_winner(score)
   break unless prompt_play_again?
   system 'clear'
 end
