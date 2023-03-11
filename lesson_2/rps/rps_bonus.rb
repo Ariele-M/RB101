@@ -1,11 +1,16 @@
 VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
 
 def win?(first, second)
-  (first == 'rock' && (second == 'scissors' || second == 'lizard')) ||
-    (first == 'paper' && (second == 'rock' || second == 'spock')) ||
-    (first == 'scissors' && (second == 'paper' || second == 'lizard')) ||
-    (first == 'lizard' && (second == 'spock' || second == 'paper')) ||
-    (first == 'spock' && (second == 'scissors' || second == 'rock'))
+  winning_moves = {
+    rock: ['scissors', 'lizard'],
+    paper: ['rock', 'spock'],
+    scissors: ['paper', 'lizard'],
+    lizard: ['spock', 'paper'],
+    spock: ['scissors', 'rock']
+  }
+  key = first.to_sym
+  a = winning_moves.values_at(key).flatten
+  a.include?(second)
 end
 
 def display_results(player, computer)
