@@ -84,20 +84,6 @@ def computer_win?(first, second)
   win?(second, first)
 end
 
-def game_result(first, second)
-  player_score = 0
-  computer_score = 0
-  if player_win?(first, second)
-    player_score += 1
-  elsif computer_win?(first, second)
-    computer_score += 1
-  else
-    0
-  end
-  { player_score: player_score,
-    computer_score: computer_score }
-end
-
 def prompt_play_again?
   prompt("play_again")
   answer = gets.chomp
@@ -112,9 +98,14 @@ def display_choices(choice, computer_choice)
   puts("=> You chose #{choice} computer chose #{computer_choice}")
 end
 
-def update_score(score, choice, computer_choice)
-  game_score = game_result(choice, computer_choice)
-  score.merge!(game_score) { |_, old_value, new_value| old_value + new_value }
+def update_score!(score, first, second)
+  if player_win?(first, second)
+    score[:player_score] += 1
+  elsif computer_win?(first, second)
+    score[:computer_score] += 1
+  else
+    0
+  end
 end
 
 def display_score(score)
@@ -146,7 +137,7 @@ loop do
 
     display_results(choice, computer_choice)
 
-    score = update_score(score, choice, computer_choice)
+    update_score!(score, choice, computer_choice)
 
     display_score(score)
   end
@@ -154,3 +145,5 @@ loop do
   break unless prompt_play_again?
   system 'clear'
 end
+
+prompt("goodbye")

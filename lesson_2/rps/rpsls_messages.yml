@@ -14,3 +14,5 @@ rules: |
   vaporizes Rock crushes Scissors.
   ---------
   The first player to win 3 games wins the match.
+
+goodbye: "Thanks for playing. Goodbye!"
