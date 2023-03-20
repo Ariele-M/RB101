@@ -1,3 +1,6 @@
+def calculate_bonus(int, boo)
+  boo ? int / 2 : 0
+end
 
 
 
